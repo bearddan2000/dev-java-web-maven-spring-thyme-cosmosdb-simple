@@ -1,0 +1,35 @@
+version: '3'
+services:
+  java-srv:
+    build: java-srv
+    ports:
+      - "80:8080"
+    command: sh -c "/wait && mvn clean sprigboot:run"
+    environment:
+      - WAIT_HOSTS=db:8081
+      - WAIT_HOSTS_TIMEOUT=300
+      - WAIT_SLEEP_INTERVAL=30
+      - WAIT_HOST_CONNECT_TIMEOUT=30
+    ports:
+      - "80:8080"
+
+  db:
+    image: mcr.microsoft.com/cosmosdb/windows/azure-cosmos-emulator
+    command: 
+      - --memory 2G
+      - --tty
+      - --interactive
+      - --mount "type=bind,source=$env:LOCALAPPDATA\CosmosDBEmulator\bind-mount,destination=./db"
+    ports:
+      - 8081:8081
+      - 8900:8900
+      - 8901:8901
+      - 8902:8902
+      - 10250:10250
+      - 10251:10251
+      - 10252:10252
+      - 10253:10253
+      - 10254:10254
+      - 10255:10255
+      - 10256:10256
+      - 10350:10350 
